@@ -1,4 +1,3 @@
-// https://contest.yandex.ru/contest/8458/problems/G/
 // В решении используется рекурсивный обход всех возможных путей (обход в глубину).
 // Локальные тесты проходит, но на контесте падает с RE
 // Есть есть предположение, что это связано с переполнением стека вызова.
@@ -9,7 +8,7 @@ const fs = require('fs');
 function parse() {
   let content = fs.readFileSync('input.txt', 'utf8').split('\n');
   const citiesCount = +content[0];
-  const [indexFrom, indexTo] = content[content.length - 1].split(' ');
+  const [indexFrom, indexTo] = content[1 + citiesCount + 1].split(' ').map(Number);
   const map = content.slice(1, citiesCount + 1).map((str) => str.split(' '));
 
   return {
@@ -64,4 +63,4 @@ const run = (way = [], currentCity = from) => {
 
 run();
 
-fs.writeFileSync('output.txt', (bestWayLength || -1).toString());
+fs.writeFileSync('output.txt', (bestWayLength).toString());
