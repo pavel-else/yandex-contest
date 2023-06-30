@@ -1,35 +1,40 @@
+// Первое решение валит какие-то тесты.
 const fs = require('fs');
 
 let content = fs.readFileSync('input.txt', 'utf8');
 const [n, pricesString] = content.toString().split('\n');
-const prices = pricesString.split(' ');
+const p = pricesString.split(' ');
 
 let min = 0;
 let max = 0;
 
-let bestCandle = [0, 0];
+const candles = [];
 
 for (let i = 0; i < n; i += 1) {
-    // console.log('min, max', min, max);
-    // increment current candle
-    if (+prices[i] > +prices[max]) {
+    if (+p[i] > +p[max]) {
         max = i;
         continue;
     }
     
-    // new candle
-    if (+prices[i] < +prices[min]) {
-        console.log('min, max', prices[min], prices[max], prices[bestCandle[1]], prices[bestCandle[0]]);
-        if (+prices[max] - +prices[min] > +prices[bestCandle[1]] - +prices[bestCandle[0]]) {
-            bestCandle = [min, max];
-        }
-
+    if (+p[i] < +p[min]) {
+        candles.push([min, max]);
         min = i;
         max = i;
-        continue;
     }
 }
 
-console.log('bestCandle', bestCandle);
+candles.push([min, max]);
+let best = candles[0];
 
-// fs.writeFileSync('output.txt', min );
+// result
+for (let i = 0; i < candles.length; i += 1) {
+    if (candles[i][0] === candles[i][1]) {
+        continue;
+    }
+    if ((+p[candles[i][1]] - +p[candles[i][0]]) > (+p[best[1]] - +p[best[0]])) {
+        best = candles[i];
+    }
+}
+
+const result = best[0] === 0 && best[1] === 0 ? '0 0' : `${best[0] + 1} ${best[1] + 1}`;
+fs.writeFileSync('output.txt', result);
