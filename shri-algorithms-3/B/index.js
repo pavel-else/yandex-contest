@@ -1,20 +1,25 @@
+// Решение в лоб падает на 21 тесте в TL.
 const fs = require('fs');
 
 let content = fs.readFileSync('input.txt', 'utf8');
 const [n, numsString] = content.toString().split('\n');
-const nums = numsString.split(' ').map(Number);
+const nums = numsString.trim().split(' ').map(Number);
 
-const dict = [];
 
-for (let i = 0; i < n; i += 1) {
-    if (!dict[nums[i]]) {
-        dict[nums[i]] = 0;
+const getCountOffers = (age) => {
+    const min = age / 2 + 7;
+    let result = -1; // Приглашение нельзя прислать самому себе
+
+    for (let i = 0; i < n; i += 1) {
+        if (nums[i] <= min || nums[i] > age) {
+            continue;
+        }
+        result += 1;
     }
-    dict[nums[i]] += 1;
-}
+    // Из-за условия +7 может случиться так, что приглашение нельзя отправить даже ровестникам.
+    return Math.max(result, 0);
+};
 
-for (let i in dict) {
-    console.log('i, dict[i]', i, dict[i]);
-}
-console.log('dict', dict);
-// fs.writeFileSync('output.txt', result.join('\n'));
+
+let result = nums.reduce((acc, age) => acc + getCountOffers(age), 0);
+fs.writeFileSync('output.txt', result.toString());
