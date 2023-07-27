@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 let content = fs.readFileSync('input.txt', 'utf8');
-const [n, numsString, q, ...lines] = content.toString().split('\n');
+const [n, numsString, qCount, ...lines] = content.toString().split('\n');
 const nums = numsString.split(' ').map(Number);
 
 const dict = [0];
@@ -15,16 +15,9 @@ for (let i = 0; i < n; i += 1) {
 }
 
 const result = [];
-for (let i = 0; i < q; i += 1) {
+for (let i = 0; i < qCount; i += 1) {
     const [l, r] = lines[i].split(' ').map(Number);
-
-    const min = dict[l - 1];
-    const max = dict[r];
-    if (min === max) {
-        result.push(max);
-    } else {
-        result.push(max - min);
-    }
+    result.push(dict[r] - dict[l - 1]);
 }
 
 fs.writeFileSync('output.txt', result.join('\n'));
