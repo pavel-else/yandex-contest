@@ -1,3 +1,4 @@
+// Запутался в условиях, падаю на 5 тесте
 const fs = require('fs');
 
 let content = fs.readFileSync('input.txt', 'utf8');
@@ -31,21 +32,35 @@ if (sortedAges.length <= 1 && dict[sortedAges[0]] <= 1) {
     return;
 }
 
-for (let r = 0; r < sortedAges.length; r += 1) {
-    const lim = Math.min(sortedAges[r] * 0.5 + 7, sortedAges[r]);
+const getCount = (r) => {
+    const base = dict[r];
+    const limit = r * 0.5 + 7;
+
+    let l = Math.floor(limit);
+
+    // Перебираем младшие возрастные группы
+    let other = 0;
+    for (let i = l; i < r; i += 1) {
+        if (!dict[i]) {
+            continue;
+        }
+
+        if (limit >= i) {
+            continue;
+        }
+
+        other += 1;
+    }
     
-    while (sortedAges[l] <= lim) {
-        l += 1;
-    }
-    console.log('l, r', l, r);
 
-    for (let j = l; j <= r; j += 1) {
-        result += dict[sortedAges[j]];
-    }
+    // Если в группе 1 человек, то приглашений внутри группы быть не может
+    const baseOffers = base <= 1 ? 0 : base;
+    return baseOffers + other * base;
 
-    if (dict[sortedAges[r]] === 1) {
-        result -= 1; // Приглашение нельзя прислать самому себе
-    }
+};
+
+for (let r = 0; r < sortedAges.length; r += 1) {
+    result += getCount(sortedAges[r]);
 }
 
 console.log( sortedAges, result);
