@@ -1,6 +1,6 @@
 # D. Разница во времени
 
-https://contest.yandex.ru/contest/50158/problems/C/
+https://contest.yandex.ru/contest/50158/problems/D/
 
 ## Legend
 
